@@ -12,42 +12,16 @@
 
 Servo servo;
 
-enum state {
-    BUTTON_NOT_PRESSED,
-    BUTTON_PRESSED
-};
-
-state _state = BUTTON_NOT_PRESSED;
-
-state getState() {
-    return _state;
-}
-
-void setState(state newState) {
-    _state = newState;
-}
-
 void setup() {
     Serial.begin(BAUD_RATE);
     servo.attach(SERVO_PIN);
 }
 
 void loop() {
-    switch (getState()) {
-        case BUTTON_NOT_PRESSED: {
-            servo.write(INACTIVE_ROTATION);
-            if (digitalRead(BUTTON_PIN)) {
-                Serial.println(String("button was detected as on: ") + digitalRead(BUTTON_PIN));
-                setState(BUTTON_PRESSED);
-            }
-        }
-        case BUTTON_PRESSED: {
-            servo.write(ACTIVE_ROTATION);
-            if (!digitalRead(BUTTON_PIN)) {
-                Serial.println(String("button was detected as off: ") + digitalRead(BUTTON_PIN));
-                setState(BUTTON_NOT_PRESSED);
-            }
-        }
+    if (digitalRead(BUTTON_PIN)) {
+        servo.write(ACTIVE_ROTATION);
+    } else {
+        servo.write(INACTIVE_ROTATION);
     }
 }
 
