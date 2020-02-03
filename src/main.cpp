@@ -3,12 +3,8 @@
 
 #define BAUD_RATE 9600
 
-#define BUTTON_PIN 2
 #define SERVO_PIN 5
-
-#define ACTIVE_ROTATION 180
-#define INACTIVE_ROTATION 0
-
+#define SENSOR_PIN 0
 
 Servo servo;
 
@@ -18,10 +14,13 @@ void setup() {
 }
 
 void loop() {
-    if (digitalRead(BUTTON_PIN)) {
-        servo.write(ACTIVE_ROTATION);
-    } else {
-        servo.write(INACTIVE_ROTATION);
-    }
+    auto pos = analogRead(SENSOR_PIN);
+
+    auto sensorValue = map(pos, 0, 1023, 0, 179);
+
+    servo.write(sensorValue);
+    delay(15);
+
+    Serial.println(sensorValue);
 }
 
